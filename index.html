@@ -41,7 +41,10 @@
   .sign { display: flex; align-items: center; gap: 1.1rem; }
   .sign h2 { margin: 0; }
   .portrait { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; object-position: 50% 30%; flex: none; box-shadow: 0 0 0 2px var(--blue), 0 0 28px rgba(122,162,247,.45); }
-  .hero-portrait { width: 132px; height: 132px; margin-top: 1.6rem; display: block; }
+  .portrait-wrap { display: block; width: 132px; height: 132px; margin-top: 1.6rem; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 2px var(--blue), 0 0 28px rgba(122,162,247,.45); }
+  .hero-portrait { width: 100%; height: 100%; display: block; box-shadow: none; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+  .portrait-wrap:hover .hero-portrait { transform: scale(1.12); }
+  @media (prefers-reduced-motion: reduce) { .hero-portrait { transition: none; } .portrait-wrap:hover .hero-portrait { transform: none; } }
   .door-list { list-style: none; margin-top: 1.2rem !important; margin-top: .4rem; }
   .door-list a { display: block; padding: .8rem 0; border-top: 1px solid #2A261F; text-decoration: none; }
   .door-list li:last-child a { border-bottom: 1px solid #2A261F; }
@@ -71,7 +74,7 @@
     .go { margin-top: 1.3rem; }
     .door-list a { padding: .55rem 0; }
     .portrait { width: 64px; height: 64px; }
-    .hero-portrait { width: 88px; height: 88px; margin-top: 1.1rem; }
+    .portrait-wrap { width: 88px; height: 88px; margin-top: 1.1rem; }
     .hint { bottom: 1.2vh; }
   }
 </style>
@@ -84,7 +87,7 @@
     <h1 class="name"><span>Collin</span><span>Nerdahl</span></h1>
     <p class="claim">Fifteen years on a factory floor. Twenty in the markets. Now AI systems.</p>
     <p class="claim">I test what I build, and keep what survives.</p>
-    <img class="portrait hero-portrait" src="assets/portrait.jpg" alt="Collin Nerdahl" width="132" height="132">
+    <span class="portrait-wrap"><img class="portrait hero-portrait" src="assets/portrait.jpg" alt="Collin Nerdahl" width="132" height="132"></span>
     <a class="go" href="#" data-goto="1">See the work</a>
   </section>
   <section class="panel">
