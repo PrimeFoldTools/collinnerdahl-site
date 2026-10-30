@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collin Nerdahl</title>
+<meta name="description" content="Fifteen years running a factory floor, nine in the markets, now AI systems. Collin Nerdahl keeps what survives the test.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Collin Nerdahl">
+<meta property="og:description" content="Fifteen years on a factory floor. Nine in the markets. Now AI systems.">
+<link rel="canonical" href="https://collinnerdahl.com/">
+<meta property="og:url" content="https://collinnerdahl.com/">
+<meta property="og:image" content="https://collinnerdahl.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Hanken+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#000000; --smoke:#17140F; --bone:#EFE9DC; --steel:#8C8F94; --gold:#FFD900; --blue:#7AA2F7; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ink); color: var(--bone); }
+  body { font-family: "Hanken Grotesk", system-ui, sans-serif; font-weight: 300; font-size: 1.0625rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  #forge { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  .track { height: calc(11 * 100vh); }
+  .panels { position: fixed; left: max(1.5rem, 7vw); top: 50%; transform: translateY(-50%); width: min(30rem, 44vw); display: grid; }
+  .panel { grid-area: 1 / 1; align-self: center; opacity: 0; visibility: hidden; will-change: opacity, transform; }
+  .name { font-family: "Cinzel", serif; font-weight: 500; font-size: clamp(2.6rem, 6vw, 5.2rem); line-height: .95; letter-spacing: .05em; }
+  .name span { display: block; }
+  .claim { margin-top: 1.3rem; max-width: 34ch; font-size: clamp(1.05rem, 1.5vw, 1.25rem); }
+  .claim + .claim { margin-top: .35rem; color: var(--steel); }
+  .years { font-family: "Cinzel", serif; font-weight: 500; font-size: 1rem; letter-spacing: .1em; color: var(--blue); }
+  h2 { font-family: "Cinzel", serif; font-weight: 500; font-size: clamp(2rem, 3.8vw, 3.2rem); line-height: 1.05; letter-spacing: .02em; margin: .5rem 0 1.1rem; }
+  .panel p { color: #D9D2C3; max-width: 46ch; }
+  .panel p + p { margin-top: .9rem; }
+  blockquote { margin-top: 1.3rem; padding-left: 1.1rem; border-left: 2px solid var(--blue); font-size: 1.15rem; line-height: 1.5; font-weight: 400; color: var(--bone); max-width: 40ch; }
+  .panel a { color: var(--bone); text-decoration-color: var(--blue); text-underline-offset: 3px; }
+  .go { margin-top: 2rem; display: inline-block; background: var(--gold); color: #000 !important; font-weight: 500; font-size: 1rem; text-decoration: none; padding: .85rem 1.6rem; border-radius: 2px; }
+  .go:hover { background: #FFE552; }
+  .visit { display: inline-block; margin-top: 1.2rem; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+  .sign { display: flex; align-items: center; gap: 1.1rem; }
+  .sign h2 { margin: 0; }
+  .portrait { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; object-position: 50% 30%; flex: none; box-shadow: 0 0 0 2px var(--blue), 0 0 28px rgba(122,162,247,.45); }
+  .hero-portrait { width: 132px; height: 132px; margin-top: 1.6rem; display: block; }
+  .door-list { list-style: none; margin-top: 1.2rem !important; margin-top: .4rem; }
+  .door-list a { display: block; padding: .8rem 0; border-top: 1px solid #2A261F; text-decoration: none; }
+  .door-list li:last-child a { border-bottom: 1px solid #2A261F; }
+  .door-list strong { display: block; font-weight: 500; font-size: 1.1rem; color: var(--bone); }
+  .door-list span { color: var(--steel); font-size: .95rem; }
+  .door-list a:hover strong { color: var(--blue); }
+  .foot { margin-top: 1.4rem; color: var(--steel); font-size: .95rem; }
+  .foot a { color: var(--steel) !important; }
+  .hint { position: fixed; left: 50%; bottom: 3vh; transform: translateX(-50%); color: var(--steel); font-size: .8rem; transition: opacity .4s; }
+  /* No WebGL (or scripts failed): show the text as a plain stacked page. */
+  html:not(.gl) #forge, html:not(.gl) .track, html:not(.gl) .hint { display: none; }
+  html:not(.gl) .panels { position: static; transform: none; width: auto; max-width: 40rem; margin: 0 auto; padding: 12vh 1.5rem; gap: 12vh; }
+  html:not(.gl) .panel { grid-area: auto; opacity: 1; visibility: visible; }
+  @media (max-width: 759px) and (max-height: 720px) {
+    .door-list a { padding: .35rem 0 !important; }
+    .door-list span { font-size: .85rem; }
+    .panel .go { margin-top: .9rem; padding: .7rem 1.3rem; }
+    .foot { margin-top: .8rem; }
+  }
+  @media (max-width: 759px) {
+    body { font-size: .97rem; line-height: 1.55; }
+    .panels { left: 16px; right: 16px; width: auto; top: auto; bottom: 5vh; transform: none; }
+    .panel { align-self: end; }
+    .name { font-size: 2.6rem; }
+    h2 { font-size: 1.9rem; margin: .3rem 0 .7rem; }
+    blockquote { font-size: 1.02rem; margin-top: .9rem; }
+    .go { margin-top: 1.3rem; }
+    .door-list a { padding: .55rem 0; }
+    .portrait { width: 64px; height: 64px; }
+    .hero-portrait { width: 88px; height: 88px; margin-top: 1.1rem; }
+    .hint { bottom: 1.2vh; }
+  }
+</style>
+</head>
+<body>
+<canvas id="forge" aria-hidden="true"></canvas>
+<div class="track"></div>
+<main class="panels">
+  <section class="panel">
+    <h1 class="name"><span>Collin</span><span>Nerdahl</span></h1>
+    <p class="claim">Fifteen years on a factory floor. Nine in the markets. Now AI systems.</p>
+    <p class="claim">I test what I build, and keep what survives.</p>
+    <img class="portrait hero-portrait" src="assets/portrait.jpg" alt="Collin Nerdahl" width="132" height="132">
+    <a class="go" href="#" data-goto="1">See the work</a>
+  </section>
+  <section class="panel">
+    <p class="years">2009 – 2024</p>
+    <h2>The shop floor</h2>
+    <p>Fifteen years at Active Playground Equipment. CNC technician to production manager, while sales grew from $650K to over $3M a year.</p>
+  </section>
+  <section class="panel">
+    <p class="years">2009 – 2024</p>
+    <h2>The shop floor</h2>
+    <p>I led the teams and owned the final check before every job shipped.</p>
+    <blockquote>When a defect repeats, you don't blame the operator. You fix the process.</blockquote>
+  </section>
+  <section class="panel">
+    <p class="years">Since 2017</p>
+    <h2>The market</h2>
+    <p>Nine years trading and investing. Custom TradingView indicators, built and tested.</p>
+  </section>
+  <section class="panel">
+    <p class="years">Since 2017</p>
+    <h2>The market</h2>
+    <p>Custom systems for discretionary traders, built around how you already trade.</p>
+  </section>
+  <section class="panel">
+    <p class="years">Since 2023</p>
+    <h2>The machine</h2>
+    <p>AI agent systems, with the same quality checks a production line runs.</p>
+  </section>
+  <section class="panel">
+    <p class="years">Since 2023</p>
+    <h2>The machine</h2>
+    <p><a href="https://github.com/PrimeFoldTools/andon">Andon</a>: an open-source guard that stops a coding agent from saying "done" without proof. Picked up by the maintainer of Serial-Studio.</p>
+  </section>
+  <section class="panel">
+    <h2>PrimeFold Tools</h2>
+    <p>Tools that make AI agents prove their work.</p>
+    <a class="visit" href="https://primefold.tools">primefold.tools</a>
+  </section>
+  <section class="panel">
+    <h2>Hidden Heuristics</h2>
+    <p>Essays on the hidden rules we run on.</p>
+    <a class="visit" href="https://hiddenheuristics.substack.com">Read on Substack</a>
+  </section>
+  <section class="panel">
+    <h2>RENU Property Partners</h2>
+    <p>Rentals and leasing in Sarnia, with Priscilla.</p>
+    <a class="visit" href="https://renupropertypartners.ca">renupropertypartners.ca</a>
+  </section>
+  <section class="panel">
+    <h2>Where the work lives</h2>
+    <ul class="door-list">
+      <li><a href="https://primefold.tools"><strong>PrimeFold Tools</strong><span>Tools that make AI agents prove their work.</span></a></li>
+      <li><a href="https://primefoldtrading.com"><strong>PrimeFold Trading</strong><span>TradingView indicators and custom trading systems.</span></a></li>
+      <li><a href="https://hiddenheuristics.substack.com"><strong>Hidden Heuristics</strong><span>Essays on the hidden rules we run on.</span></a></li>
+      <li><a href="https://renupropertypartners.ca"><strong>RENU Property Partners</strong><span>Rentals and leasing in Sarnia, with Priscilla.</span></a></li>
+    </ul>
+    <a class="go" href="mailto:primefoldtools@gmail.com?subject=Working%20together">Work with me</a>
+    <p class="foot">Ontario, Canada. <a href="mailto:primefoldtools@gmail.com">primefoldtools@gmail.com</a></p>
+  </section>
+</main>
+<p class="hint" id="hint" aria-hidden="true">Scroll</p>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/","d3-delaunay":"https://cdn.jsdelivr.net/npm/d3-delaunay@6.0.4/+esm"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { Delaunay } from 'd3-delaunay';
+const ICONS=["<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 100 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <circle class=\"s\" cx=\"50\" cy=\"50\" r=\"30\" stroke-width=\"6\"/>\n        <polygon class=\"g\" transform=\"rotate(45 50 50)\" points=\"50,24 53,47 76,50 53,53 50,76 47,53 24,50 47,47\"/>\n        <polygon class=\"g cut\" points=\"50,4 55,45 96,50 55,55 50,96 45,55 4,50 45,45\"/>\n      </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"560\" height=\"400\" viewBox=\"0 0 140 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <!-- swing set: splayed legs, top beam, one swing mid-arc with a child -->\n        <path class=\"s\" stroke-width=\"6\" d=\"M4 94 L12 18 M64 94 L56 18 M8 18 H60\"/>\n        <path class=\"s\" stroke-width=\"2.5\" d=\"M25 18 V66 M43 18 V66\"/>\n        <circle class=\"g\" cx=\"34\" cy=\"40\" r=\"6.5\"/>\n        <path class=\"g\" d=\"M28 49 H40 L42 64 H26 Z\"/>\n        <rect class=\"g\" x=\"21\" y=\"64\" width=\"26\" height=\"5\" rx=\"2\"/>\n        <path class=\"s\" stroke-width=\"4.5\" d=\"M30.5 69 V82 M37.5 69 V82\"/>\n        <!-- slide: ladder, platform, chute -->\n        <path class=\"s\" stroke-width=\"4\" d=\"M84 94 V32 M96 94 V32 M84 46 H96 M84 60 H96 M84 74 H96 M84 88 H96\"/>\n        <path class=\"s\" stroke-width=\"5\" d=\"M80 32 H106 M84 32 V22 M96 22 V32\"/>\n        <path class=\"s\" stroke-width=\"8\" d=\"M106 34 C116 50 120 82 136 90\"/>\n      </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 100 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <g transform=\"rotate(45 50 50)\">\n          <rect class=\"g\" x=\"45\" y=\"36\" width=\"10\" height=\"56\" rx=\"4\"/>\n          <circle class=\"g\" cx=\"50\" cy=\"26\" r=\"16\"/>\n          <rect class=\"bg\" x=\"44\" y=\"6\" width=\"12\" height=\"20\"/>\n        </g>\n        <g transform=\"rotate(-45 50 50)\" class=\"cut\">\n          <rect class=\"g cut\" x=\"45\" y=\"30\" width=\"10\" height=\"62\" rx=\"3\"/>\n          <path class=\"g cut\" d=\"M28 14 H66 L72 20 V34 H28 Z\"/>\n        </g>\n      </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 100 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <path class=\"s\" stroke-width=\"3\" d=\"M24 32 V64 M50 20 V54 M76 6 V40\"/>\n        <rect class=\"g\" x=\"17\" y=\"38\" width=\"14\" height=\"20\" rx=\"1\"/>\n        <rect class=\"g\" x=\"43\" y=\"26\" width=\"14\" height=\"22\" rx=\"1\"/>\n        <rect class=\"g\" x=\"69\" y=\"12\" width=\"14\" height=\"24\" rx=\"1\"/>\n        <path class=\"s\" stroke-width=\"6\" d=\"M8 92 L32 80 L50 85 L80 66\"/>\n        <polygon class=\"g\" points=\"94,58 86,76 74,62\"/>\n      </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 100 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <polygon class=\"g\" points=\"38,12 62,12 56,30 44,30\"/>\n        <path class=\"g\" d=\"M44 32 C22 38 14 64 20 80 C24 92 76 92 80 80 C86 64 78 38 56 32 Z\"/>\n        <rect class=\"bg\" x=\"41\" y=\"28\" width=\"18\" height=\"4\"/>\n        <text x=\"50\" y=\"78\" text-anchor=\"middle\" class=\"bg\" font-family=\"Hanken Grotesk, sans-serif\" font-weight=\"600\" font-size=\"36\">$</text>\n      </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 100 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <line class=\"s\" stroke-width=\"3\" x1=\"50\" y1=\"4\" x2=\"50\" y2=\"11\"/><circle class=\"g\" cx=\"50\" cy=\"4\" r=\"3\"/>\n        <rect class=\"g\" x=\"38\" y=\"11\" width=\"24\" height=\"17\" rx=\"3\"/>\n        <circle class=\"bg\" cx=\"45\" cy=\"19\" r=\"2.6\"/><circle class=\"bg\" cx=\"55\" cy=\"19\" r=\"2.6\"/>\n        <rect class=\"g\" x=\"37\" y=\"31\" width=\"26\" height=\"25\" rx=\"3\"/>\n        <path class=\"s\" stroke-width=\"7\" d=\"M34 36 L28 47 L31 57 M66 36 L71 47 L68 57\"/>\n        <path class=\"s\" stroke-width=\"8\" d=\"M45 60 L41 74 L37 88 M55 60 L58 74 L62 88\"/>\n        <path class=\"s\" stroke-width=\"6\" d=\"M33 90 H40 M61 90 H68\"/>\n      </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 100 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <path class=\"s\" stroke-width=\"3\" opacity=\".55\" d=\"M4 40 H16 M2 52 H14 M6 64 H16\"/>\n        <g transform=\"rotate(14 50 56)\">\n          <line class=\"s\" stroke-width=\"3\" x1=\"50\" y1=\"4\" x2=\"50\" y2=\"11\"/><circle class=\"g\" cx=\"50\" cy=\"4\" r=\"3\"/>\n          <rect class=\"g\" x=\"38\" y=\"11\" width=\"24\" height=\"17\" rx=\"3\"/>\n          <circle class=\"bg\" cx=\"47\" cy=\"19\" r=\"2.6\"/><circle class=\"bg\" cx=\"57\" cy=\"19\" r=\"2.6\"/>\n          <rect class=\"g\" x=\"37\" y=\"31\" width=\"26\" height=\"25\" rx=\"3\"/>\n          <path class=\"s\" stroke-width=\"7\" d=\"M35 36 L24 42 L20 32 M65 36 L76 44 L84 36\"/>\n          <path class=\"s\" stroke-width=\"8\" d=\"M56 60 L72 64 L70 80 M44 60 L36 76 L22 84\"/>\n        </g>\n      </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 100 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <mask id=\"pfmask\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"100\" height=\"100\">\n          <image href=\"data:image/png;base64,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\" x=\"0\" y=\"0\" width=\"100\" height=\"100\"/>\n        </mask>\n        <circle class=\"s\" cx=\"50\" cy=\"50\" r=\"47\" stroke-width=\"5.5\"/>\n        <rect class=\"g\" x=\"0\" y=\"0\" width=\"100\" height=\"100\" mask=\"url(#pfmask)\"/>\n        <circle class=\"g\" cx=\"50\" cy=\"27.1\" r=\"3\"/>\n      </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 100 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <g class=\"s\" stroke-width=\"5\">\n          <line x1=\"50\" y1=\"6\" x2=\"50\" y2=\"94\"/><line x1=\"6\" y1=\"50\" x2=\"94\" y2=\"50\"/>\n          <line x1=\"19\" y1=\"19\" x2=\"81\" y2=\"81\"/><line x1=\"81\" y1=\"19\" x2=\"19\" y2=\"81\"/>\n        </g>\n        <g class=\"g\">\n          <circle cx=\"50\" cy=\"6\" r=\"5\"/><circle cx=\"50\" cy=\"94\" r=\"5\"/><circle cx=\"6\" cy=\"50\" r=\"5\"/><circle cx=\"94\" cy=\"50\" r=\"5\"/>\n          <circle cx=\"19\" cy=\"19\" r=\"5\"/><circle cx=\"81\" cy=\"81\" r=\"5\"/><circle cx=\"81\" cy=\"19\" r=\"5\"/><circle cx=\"19\" cy=\"81\" r=\"5\"/>\n        </g>\n        <circle class=\"s\" cx=\"50\" cy=\"50\" r=\"31\" stroke-width=\"6\"/>\n        <circle class=\"g\" cx=\"50\" cy=\"50\" r=\"17\"/>\n        <path class=\"bg\" d=\"M35 50 Q50 38 65 50 Q50 62 35 50 Z\"/>\n        <circle class=\"g\" cx=\"50\" cy=\"50\" r=\"4.5\"/>\n      </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 100 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <rect class=\"g\" x=\"66\" y=\"18\" width=\"10\" height=\"20\"/>\n        <polygon class=\"g\" points=\"50,10 92,46 82,46 82,90 18,90 18,46 8,46\"/>\n        <rect class=\"bg\" x=\"43\" y=\"62\" width=\"14\" height=\"28\"/>\n        <rect class=\"bg\" x=\"27\" y=\"54\" width=\"10\" height=\"10\"/>\n        <rect class=\"bg\" x=\"63\" y=\"54\" width=\"10\" height=\"10\"/>\n      </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 100 100\"><style>.g{fill:#fff}.s{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round}.bg{fill:#000}.cut{stroke:#000;stroke-width:3;paint-order:stroke}</style>\n        <circle class=\"s\" cx=\"50\" cy=\"50\" r=\"30\" stroke-width=\"6\"/>\n        <polygon class=\"g\" transform=\"rotate(45 50 50)\" points=\"50,24 53,47 76,50 53,53 50,76 47,53 24,50 47,47\"/>\n        <polygon class=\"g cut\" points=\"50,4 55,45 96,50 55,55 50,96 45,55 4,50 45,45\"/>\n      </svg>"], N=ICONS.length, S=360, BOX=300, STEP=18, UNIT=3.2;
+const panels=[...document.querySelectorAll('.panel')];
+if (panels.length!==N) console.error('panel/icon count mismatch', panels.length, N);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('[data-goto]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();scrollTo({top:innerHeight*Number(a.dataset.goto),behavior:reduce?'auto':'smooth'});}));
+
+// --- icon -> facets ---
+const load=src=>new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=src;});
+async function raster(svg){
+  const c=document.createElement('canvas');c.width=c.height=S;const g=c.getContext('2d',{willReadFrequently:true});
+  g.fillStyle='#000';g.fillRect(0,0,S,S);
+  const im=await load('data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg));
+  const k=BOX/Math.max(im.width,im.height),w=im.width*k,h=im.height*k;g.drawImage(im,(S-w)/2,(S-h)/2,w,h);
+  const d=g.getImageData(0,0,S,S).data;let on=new Uint8Array(S*S);for(let p=0;p<S*S;p++)on[p]=d[p*4]>127?1:0;
+  for(let it=0;it<2;it++){const n=on.slice();for(let y=1;y<S-1;y++)for(let x=1;x<S-1;x++){const q=y*S+x;if(!on[q]&&(on[q-1]||on[q+1]||on[q-S]||on[q+S]))n[q]=1;}on=n;}
+  return on;}
+function tri(on){
+  const at=(x,y)=>{x|=0;y|=0;return x>=0&&y>=0&&x<S&&y<S&&on[y*S+x]===1;};const pts=[];
+  for(let y=0;y<S;y+=STEP)for(let x=0;x<S;x+=STEP){const jx=x+Math.random()*STEP,jy=y+Math.random()*STEP;if(at(jx,jy))pts.push([jx,jy]);}
+  for(let y=1;y<S-1;y+=3)for(let x=1;x<S-1;x+=3){if(at(x,y)&&(!at(x+3,y)||!at(x-3,y)||!at(x,y+3)||!at(x,y-3))&&Math.random()<.5)pts.push([x,y]);}
+  const t=Delaunay.from(pts).triangles,out=[];
+  for(let i=0;i<t.length;i+=3){const a=pts[t[i]],b=pts[t[i+1]],e=pts[t[i+2]];const cx=(a[0]+b[0]+e[0])/3,cy=(a[1]+b[1]+e[1])/3;
+    if(!at(cx,cy)||!at((a[0]+b[0])/2,(a[1]+b[1])/2)||!at((b[0]+e[0])/2,(b[1]+e[1])/2)||!at((e[0]+a[0])/2,(e[1]+a[1])/2))continue;
+    if(Math.abs((b[0]-a[0])*(e[1]-a[1])-(e[0]-a[0])*(b[1]-a[1]))>2500)continue;
+    out.push({p:[a,b,e],cx,cy,sh:.8+Math.random()*.32});}
+  out.sort((p,q)=>Math.atan2(p.cy-S/2,p.cx-S/2)-Math.atan2(q.cy-S/2,q.cx-S/2));return out;}
+const sets=[];for(const svg of ICONS)sets.push(tri(await raster(svg)));
+const NT=Math.max(...sets.map(s=>s.length));
+const Wp=p=>[(p[0]-S/2)/S*UNIT,-(p[1]-S/2)/S*UNIT];
+const shapes=sets.map(set=>{const P=new Float32Array(NT*9),C=new Float32Array(NT);
+  for(let i=0;i<NT;i++){let t=set[i],collapse=false;if(!t){t=set[Math.floor(i*set.length/NT)];collapse=true;}
+    const cc=Wp([t.cx,t.cy]);for(let k=0;k<3;k++){const w=collapse?cc:Wp(t.p[k]);P.set([w[0],w[1],0],i*9+k*3);}C[i]=t.sh;}
+  return {P,C};});
+
+// --- scene ---
+const geo=new THREE.BufferGeometry(),pos=new Float32Array(NT*9),col=new Float32Array(NT*9);
+geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('color',new THREE.BufferAttribute(col,3));
+let R;try{R=new THREE.WebGLRenderer({canvas:document.getElementById('forge'),antialias:true});}catch(e){console.warn('WebGL unavailable: showing the plain page.');}
+if(R){document.documentElement.classList.add('gl');
+R.setPixelRatio(Math.min(devicePixelRatio,2));R.setClearColor(0x000000,1);
+R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.6;
+const sc=new THREE.Scene();sc.environment=new THREE.PMREMGenerator(R).fromScene(new RoomEnvironment(),.02).texture;sc.environmentIntensity=1.6;
+const cam=new THREE.PerspectiveCamera(34,1,.1,50);
+const k1=new THREE.DirectionalLight(0xffe2b0,3);k1.position.set(-3,4,5);sc.add(k1);sc.add(new THREE.DirectionalLight(0xfff1d6,1.2));
+const cool=new THREE.DirectionalLight(0x7aa2f7,1.6);cool.position.set(5,-2,2.5);sc.add(cool);   // cognitive-blue edge light, catches facets as they fold
+const GOLD_GLOW=new THREE.Color(0x5a3c00),EMBER=new THREE.Color(0xff6a1f);
+const mat=new THREE.MeshPhysicalMaterial({color:0xf0c45a,metalness:1,roughness:.3,emissive:EMBER.clone(),emissiveIntensity:1.4,flatShading:true,side:THREE.DoubleSide,vertexColors:true});
+const mesh=new THREE.Mesh(geo,mat);const grp=new THREE.Group();grp.add(mesh);sc.add(grp);
+// cognitive-blue halo behind the icon, like the glow around the mark on primefold.tools
+const hc=document.createElement('canvas');hc.width=hc.height=256;{const g=hc.getContext('2d'),rg=g.createRadialGradient(128,128,0,128,128,128);rg.addColorStop(0,'rgba(122,162,247,.75)');rg.addColorStop(.38,'rgba(122,162,247,.32)');rg.addColorStop(1,'rgba(122,162,247,0)');g.fillStyle=rg;g.fillRect(0,0,256,256);}
+const halo=new THREE.Mesh(new THREE.PlaneGeometry(UNIT*1.5,UNIT*1.5),new THREE.MeshBasicMaterial({map:Object.assign(new THREE.CanvasTexture(hc),{colorSpace:THREE.SRGBColorSpace}),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,toneMapped:false}));halo.position.z=-1;grp.add(halo);
+const dl=new Float32Array(NT).map((_,i)=>i/NT*.35);const ease=s=>s<.5?4*s*s*s:1-Math.pow(-2*s+2,3)/2;
+function setT(x){
+  const a=Math.min(N-2,Math.max(0,Math.floor(x))),p=Math.min(1,Math.max(0,x-a)),A=shapes[a],B=shapes[a+1];
+  for(let i=0;i<NT;i++){const s=ease(Math.min(1,Math.max(0,(p-dl[i])/.6))),lift=reduce?0:Math.sin(Math.PI*s);const sh=A.C[i]+(B.C[i]-A.C[i])*s;
+    for(let k=0;k<3;k++){const j=i*9+k*3;pos[j]=A.P[j]+(B.P[j]-A.P[j])*s;pos[j+1]=A.P[j+1]+(B.P[j+1]-A.P[j+1])*s+lift*.2;
+      pos[j+2]=lift*(i%2?.7:-.7);col[j]=col[j+1]=col[j+2]=sh;}}
+  geo.attributes.position.needsUpdate=true;geo.attributes.color.needsUpdate=true;geo.computeVertexNormals();
+  panels.forEach((el,i)=>{const d=x-i,o=Math.max(0,1-Math.abs(d)*2.6);el.style.opacity=o;el.style.transform=`translateY(${-d*28}px)`;
+    el.style.visibility=o>.02?'visible':'hidden';el.style.pointerEvents=o>.5?'auto':'none';});
+  document.getElementById('hint').style.opacity=x<.3?1:0;}
+
+// --- layout: icon beside the text (desktop) or in the free space above it (phone) ---
+function rs(){
+  R.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;const mob=innerWidth<760,z=mob?8:6;cam.position.set(0,0,z);cam.updateProjectionMatrix();
+  const vh=2*Math.tan(THREE.MathUtils.degToRad(17))*z,vw=vh*cam.aspect,upp=vh/innerHeight;
+  if(mob){
+    const tallest=Math.max(...panels.map(p=>p.getBoundingClientRect().height));
+    const freePx=Math.max(64,innerHeight-tallest-innerHeight*.05-28);
+    const sizePx=Math.min(innerWidth*.72,freePx*.86);
+    grp.scale.setScalar(sizePx*upp/UNIT);grp.position.set(0,(innerHeight/2-(14+freePx/2))*upp,0);
+    window.__layout={mob,iconBottomPx:14+freePx/2+sizePx/2,panelTopPx:innerHeight-innerHeight*.05-tallest};
+  } else {grp.scale.setScalar(Math.min(vh*.68,vw*.4)/UNIT);grp.position.set(vw*.2,0,0);window.__layout={mob};}
+}
+addEventListener('resize',rs);document.fonts?.ready.then(rs);rs();
+
+const t0=performance.now();let cur=0;
+function fr(now){
+  const tg=window.__forceT??(scrollY/innerHeight);cur=reduce?tg:cur+(tg-cur)*.09;setT(Math.min(N-1,Math.max(0,cur)));
+  const heat=reduce?1:Math.min(1,(now-t0)/2400),e=1-Math.pow(1-heat,3);   // ember on load, cools to gold
+  mat.emissive.copy(EMBER).lerp(GOLD_GLOW,e);mat.emissiveIntensity=1.4+(.55-1.4)*e;
+  mesh.rotation.y=reduce?0:Math.sin(now/3500)*.12;halo.material.opacity=reduce?.8:.7+Math.sin(now/1800)*.15;R.render(sc,cam);requestAnimationFrame(fr);}
+requestAnimationFrame(fr);}
+window.__gl=!!R;window.__ready=true;
+</script>
+</body>
+</html>
