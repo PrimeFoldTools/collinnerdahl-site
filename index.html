@@ -58,6 +58,26 @@
   html:not(.gl) #forge, html:not(.gl) .track, html:not(.gl) .hint { display: none; }
   html:not(.gl) .panels { position: static; transform: none; width: auto; max-width: 40rem; margin: 0 auto; padding: 12vh 1.5rem; gap: 12vh; }
   html:not(.gl) .panel { grid-area: auto; opacity: 1; visibility: visible; }
+  /* Contact panel */
+  .contact { border: 0; padding: 0; background: transparent; color: var(--bone); max-width: min(30rem, calc(100vw - 32px)); width: 100%; margin: auto; max-height: calc(100dvh - 24px); overflow: auto; }
+  @media (max-height: 720px) { .contact-card { padding: 1.3rem 1.2rem 1.1rem; } .contact textarea { min-height: 5rem; } .contact label { margin-top: .6rem; } .contact .sub { margin-bottom: .6rem; } }
+  .contact::backdrop { background: rgba(0,0,0,.72); backdrop-filter: blur(3px); }
+  .contact-card { position: relative; background: var(--smoke); border: 1px solid #2A261F; border-radius: 6px; padding: 1.8rem 1.6rem 1.5rem; box-shadow: 0 0 0 1px rgba(122,162,247,.18), 0 20px 60px rgba(0,0,0,.6); }
+  .contact h2 { font-size: 1.8rem; margin: 0 0 .4rem; }
+  .contact .sub { color: var(--steel); font-size: .95rem; margin-bottom: 1.2rem; }
+  .contact label { display: block; font-size: .85rem; color: var(--steel); margin: .9rem 0 .35rem; }
+  .contact input, .contact textarea { width: 100%; background: #0B0A08; border: 1px solid #2A261F; border-radius: 3px; color: var(--bone); font: inherit; font-size: 1rem; padding: .7rem .8rem; }
+  .contact textarea { min-height: 7.5rem; resize: vertical; }
+  .contact input:focus, .contact textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 2px rgba(122,162,247,.25); }
+  .contact .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .contact button.go { border: 0; cursor: pointer; font-family: inherit; margin-top: 1.3rem; }
+  .contact .close { position: absolute; top: .7rem; right: .8rem; background: none; border: 0; color: var(--steel); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: .3rem; }
+  .contact .close:hover { color: var(--bone); }
+  .contact .alt { margin-top: 1.2rem; font-size: .9rem; color: var(--steel); }
+  .contact .copy { background: none; border: 0; padding: 0; font: inherit; color: var(--bone); text-decoration: underline; text-decoration-color: var(--blue); text-underline-offset: 3px; cursor: pointer; }
+  .contact .status { margin-top: 1rem; font-size: .95rem; min-height: 1.4em; }
+  .contact .status.ok { color: var(--bone); }
+  .contact .status.err { color: #E8A0A0; }
   @media (max-width: 759px) and (max-height: 720px) {
     .door-list a { padding: .35rem 0 !important; }
     .door-list span { font-size: .85rem; }
@@ -66,15 +86,17 @@
   }
   @media (max-width: 759px) {
     body { font-size: .97rem; line-height: 1.55; }
-    .panels { left: 16px; right: 16px; width: auto; top: auto; bottom: 5vh; transform: none; }
-    .panel { align-self: end; }
+    .panels { left: 16px; right: 16px; width: auto; top: 0; bottom: auto; transform: none; }
+    .panel { align-self: start; }
     .name { font-size: 2.6rem; }
     h2 { font-size: 1.9rem; margin: .3rem 0 .7rem; }
     blockquote { font-size: 1.02rem; margin-top: .9rem; }
     .go { margin-top: 1.3rem; }
     .door-list a { padding: .55rem 0; }
-    .portrait { width: 64px; height: 64px; }
-    .portrait-wrap { width: 88px; height: 88px; margin-top: 1.1rem; }
+    .portrait-wrap { width: 116px; height: 116px; margin: 1.1rem auto 0; }
+    .panels { text-align: center; }
+    .panel p, .claim { margin-left: auto; margin-right: auto; }
+    blockquote { border-left: 0; padding-left: 0; border-top: 2px solid var(--blue); padding-top: .8rem; margin: .9rem auto 0; max-width: 32ch; }
     .hint { bottom: 1.2vh; }
   }
 </style>
@@ -145,10 +167,31 @@
       <li><a href="https://hiddenheuristics.substack.com"><strong>Hidden Heuristics</strong><span>Essays on the hidden rules we run on.</span></a></li>
       <li><a href="https://renupropertypartners.ca"><strong>RENU Property Partners</strong><span>Rentals and leasing in and around Sarnia, with Priscilla.</span></a></li>
     </ul>
-    <a class="go" href="mailto:primefoldtools@gmail.com?subject=Working%20together">Work with me</a>
-    <p class="foot">Ontario, Canada. <a href="mailto:primefoldtools@gmail.com">primefoldtools@gmail.com</a></p>
+    <button class="go" type="button" data-contact>Work with me</button>
+    <p class="foot">Ontario, Canada.</p>
   </section>
 </main>
+<dialog class="contact" id="contact" aria-labelledby="contact-title">
+  <div class="contact-card">
+    <button class="close" type="button" aria-label="Close" data-close>&times;</button>
+    <h2 id="contact-title">Work with me</h2>
+    <p class="sub">Tell me what you're working on. I'll reply by email.</p>
+    <form id="contact-form" novalidate>
+      <input type="hidden" name="subject" value="New message from collinnerdahl.com">
+      <input type="hidden" name="from_name" value="collinnerdahl.com">
+      <div class="hp" aria-hidden="true"><label>Leave this empty<input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off"></label></div>
+      <label for="c-name">Name</label>
+      <input id="c-name" name="name" type="text" autocomplete="name" required maxlength="120">
+      <label for="c-email">Email</label>
+      <input id="c-email" name="email" type="email" autocomplete="email" required maxlength="200">
+      <label for="c-msg">Message</label>
+      <textarea id="c-msg" name="message" required maxlength="4000"></textarea>
+      <button class="go" type="submit">Send</button>
+      <p class="status" id="c-status" role="status" aria-live="polite"></p>
+    </form>
+    <p class="alt">Prefer your own email? <button class="copy" type="button" data-copy="primefoldtools@gmail.com">primefoldtools@gmail.com</button></p>
+  </div>
+</dialog>
 <p class="hint" id="hint" aria-hidden="true">Scroll</p>
 
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/","d3-delaunay":"https://cdn.jsdelivr.net/npm/d3-delaunay@6.0.4/+esm"}}</script>
@@ -219,27 +262,70 @@ function setT(x){
   document.getElementById('hint').style.opacity=x<.3?1:0;}
 
 // --- layout: icon beside the text (desktop) or in the free space above it (phone) ---
+let MOB=null;
+function placeMobile(x){
+  const a=Math.min(N-2,Math.max(0,Math.floor(x))),p=Math.min(1,Math.max(0,x-a)),h=MOB.H[a]+(MOB.H[a+1]-MOB.H[a])*p;
+  const top=Math.max(MOB.EDGE,(innerHeight-MOB.HINT-(MOB.vis+MOB.GAP+h))/2),cy=top+MOB.vis/2;
+  grp.position.y=(innerHeight/2-cy)*MOB.upp;document.querySelector('.panels').style.top=(top+MOB.vis+MOB.GAP)+'px';
+  window.__layout={mob:true,iconBottomPx:top+MOB.vis,panelTopPx:top+MOB.vis+MOB.GAP,gapPx:MOB.GAP,panelBottomPx:top+MOB.vis+MOB.GAP+h};
+}
 function rs(){
   R.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;const mob=innerWidth<760,z=mob?8:6;cam.position.set(0,0,z);cam.updateProjectionMatrix();
   const vh=2*Math.tan(THREE.MathUtils.degToRad(17))*z,vw=vh*cam.aspect,upp=vh/innerHeight;
   if(mob){
-    const tallest=Math.max(...panels.map(p=>p.getBoundingClientRect().height));
-    const freePx=Math.max(64,innerHeight-tallest-innerHeight*.05-28);
-    const sizePx=Math.min(innerWidth*.72,freePx*.86);
-    grp.scale.setScalar(sizePx*upp/UNIT);grp.position.set(0,(innerHeight/2-(14+freePx/2))*upp,0);
-    window.__layout={mob,iconBottomPx:14+freePx/2+sizePx/2,panelTopPx:innerHeight-innerHeight*.05-tallest};
-  } else {grp.scale.setScalar(Math.min(vh*.68,vw*.4)/UNIT);grp.position.set(vw*.2,0,0);window.__layout={mob};}
+    // Phone: icon and text are one block, centred on screen; the block re-centres as panel heights change.
+    const H=panels.map(p=>p.getBoundingClientRect().height),tallest=Math.max(...H),GAP=18,EDGE=16,HINT=22;
+    const sizePx=Math.max(72,Math.min(innerWidth*.62,300,(innerHeight-tallest-GAP-2*EDGE-HINT)/(BOX/S)));
+    grp.scale.setScalar(sizePx*upp/UNIT);grp.position.x=0;
+    MOB={H,sizePx,vis:sizePx*BOX/S,GAP,EDGE,HINT,upp};
+  } else {MOB=null;grp.scale.setScalar(Math.min(vh*.68,vw*.4)/UNIT);grp.position.set(vw*.2,0,0);document.querySelector('.panels').style.top='';window.__layout={mob};}
 }
 addEventListener('resize',rs);document.fonts?.ready.then(rs);rs();
 
 const t0=performance.now();let cur=0;
 function fr(now){
-  const tg=window.__forceT??(scrollY/innerHeight);cur=reduce?tg:cur+(tg-cur)*.09;setT(Math.min(N-1,Math.max(0,cur)));
+  const tg=window.__forceT??(scrollY/innerHeight);cur=reduce?tg:cur+(tg-cur)*.09;setT(Math.min(N-1,Math.max(0,cur)));if(MOB)placeMobile(Math.min(N-1,Math.max(0,cur)));
   const heat=reduce?1:Math.min(1,(now-t0)/2400),e=1-Math.pow(1-heat,3);   // ember on load, cools to gold
   mat.emissive.copy(EMBER).lerp(GOLD_GLOW,e);mat.emissiveIntensity=1.4+(.55-1.4)*e;
   mesh.rotation.y=reduce?0:Math.sin(now/3500)*.12;halo.material.opacity=reduce?.8:.7+Math.sin(now/1800)*.15;R.render(sc,cam);requestAnimationFrame(fr);}
 requestAnimationFrame(fr);}
 window.__gl=!!R;window.__ready=true;
+</script>
+<script>
+// Contact panel. Plain script so it works even if the 3D scene does not load.
+(() => {
+  const FORM_KEY = '/*WEB3FORMS_KEY*/';
+  const dlg = document.getElementById('contact'), form = document.getElementById('contact-form'), status = document.getElementById('c-status');
+  const say = (t, cls) => { status.textContent = t; status.className = 'status ' + (cls || ''); };
+  const connected = FORM_KEY && !FORM_KEY.startsWith('/*');
+  if (!connected) {   // until the Web3Forms key is set: email-copy only, no form that cannot send
+    form.hidden = true; dlg.querySelector('.sub').textContent = "Tell me what you're working on. Copy my email and send me a note.";
+    dlg.querySelector('.alt').firstChild.textContent = 'Email: ';
+  }
+  document.querySelectorAll('[data-contact]').forEach(b => b.addEventListener('click', () => { say(''); dlg.showModal(); document.getElementById('c-name').focus(); }));
+  dlg.querySelector('[data-close]').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', async () => {
+    const t = b.dataset.copy; let ok = false;
+    try { await navigator.clipboard.writeText(t); ok = true; } catch (e) {}
+    const was = b.textContent; b.textContent = ok ? 'Copied' : t; setTimeout(() => { b.textContent = was; }, 1600);
+  }));
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!form.checkValidity()) { say('Please fill in your name, a valid email and a message.', 'err'); form.reportValidity(); return; }
+    if (form.botcheck.checked) return;
+    if (!FORM_KEY || FORM_KEY.startsWith('/*')) { say('The form is not connected yet. Please use the email address below.', 'err'); return; }
+    const btn = form.querySelector('button[type=submit]'); btn.disabled = true; say('Sending...');
+    try {
+      const data = Object.fromEntries(new FormData(form)); data.access_key = FORM_KEY; delete data.botcheck;
+      const r = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok && j.success) { form.reset(); say('Thanks. Your message is on its way.', 'ok'); }
+      else say('That did not go through. Please try again, or use the email address below.', 'err');
+    } catch (err) { say('That did not go through. Please try again, or use the email address below.', 'err'); }
+    finally { btn.disabled = false; }
+  });
+})();
 </script>
 </body>
 </html>
