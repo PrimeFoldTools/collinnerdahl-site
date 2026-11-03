@@ -335,7 +335,7 @@ window.__gl=!!R;window.__ready=true;
 <script>
 // Contact panel. Plain script so it works even if the 3D scene does not load.
 (() => {
-  const FORM_KEY = '/*WEB3FORMS_KEY*/';
+  const FORM_KEY = 'a067ed76-b149-4879-b13e-c829c8e95f96';   // Web3Forms access key (public by design; can only send TO Collin)
   const dlg = document.getElementById('contact'), form = document.getElementById('contact-form'), status = document.getElementById('c-status');
   const say = (t, cls) => { status.textContent = t; status.className = 'status ' + (cls || ''); };
   const connected = FORM_KEY && !FORM_KEY.startsWith('/*');
