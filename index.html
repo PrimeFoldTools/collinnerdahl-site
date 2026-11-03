@@ -358,8 +358,9 @@ window.__gl=!!R;window.__ready=true;
     if (!FORM_KEY || FORM_KEY.startsWith('/*')) { say('The form is not connected yet. Please use the email address below.', 'err'); return; }
     const btn = form.querySelector('button[type=submit]'); btn.disabled = true; say('Sending...');
     try {
-      const data = Object.fromEntries(new FormData(form)); data.access_key = FORM_KEY; delete data.botcheck;
-      const r = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+      // Plain form data (Web3Forms' documented browser method): no custom Content-Type, so no CORS preflight.
+      const data = new FormData(form); data.append('access_key', FORM_KEY); data.delete('botcheck');
+      const r = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { Accept: 'application/json' }, body: data });
       const j = await r.json().catch(() => ({}));
       if (r.ok && j.success) { form.reset(); say('Thanks. Your message is on its way.', 'ok'); }
       else say('That did not go through. Please try again, or use the email address below.', 'err');
