@@ -217,7 +217,9 @@
     <button class="close" type="button" aria-label="Close" data-close>&times;</button>
     <h2 id="contact-title">Work with me</h2>
     <p class="sub">Tell me what you're working on. I'll reply by email.</p>
-    <form id="contact-form" novalidate>
+    <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+      <input type="hidden" name="access_key" value="a067ed76-b149-4879-b13e-c829c8e95f96">
+      <input type="hidden" name="redirect" value="https://collinnerdahl.com/?sent=1">
       <input type="hidden" name="subject" value="New message from collinnerdahl.com">
       <input type="hidden" name="from_name" value="collinnerdahl.com">
       <div class="hp" aria-hidden="true"><label>Leave this empty<input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off"></label></div>
@@ -339,6 +341,9 @@ window.__gl=!!R;window.__ready=true;
   const dlg = document.getElementById('contact'), form = document.getElementById('contact-form'), status = document.getElementById('c-status');
   const say = (t, cls) => { status.textContent = t; status.className = 'status ' + (cls || ''); };
   const connected = FORM_KEY && !FORM_KEY.startsWith('/*');
+  if (new URLSearchParams(location.search).get('sent') === '1') {   // back from Web3Forms
+    history.replaceState(null, '', location.pathname); say('Thanks. Your message is on its way.', 'ok'); form.hidden = true; dlg.showModal();
+  }
   if (!connected) {   // until the Web3Forms key is set: email-copy only, no form that cannot send
     form.hidden = true; dlg.querySelector('.sub').textContent = "Tell me what you're working on. Copy my email and send me a note.";
     dlg.querySelector('.alt').firstChild.textContent = 'Email: ';
@@ -351,21 +356,12 @@ window.__gl=!!R;window.__ready=true;
     try { await navigator.clipboard.writeText(t); ok = true; } catch (e) {}
     const was = b.textContent; b.textContent = ok ? 'Copied' : t; setTimeout(() => { b.textContent = was; }, 1600);
   }));
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    if (!form.checkValidity()) { say('Please fill in your name, a valid email and a message.', 'err'); form.reportValidity(); return; }
-    if (form.botcheck.checked) return;
-    if (!FORM_KEY || FORM_KEY.startsWith('/*')) { say('The form is not connected yet. Please use the email address below.', 'err'); return; }
-    const btn = form.querySelector('button[type=submit]'); btn.disabled = true; say('Sending...');
-    try {
-      // Plain form data (Web3Forms' documented browser method): no custom Content-Type, so no CORS preflight.
-      const data = new FormData(form); data.append('access_key', FORM_KEY); data.delete('botcheck');
-      const r = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { Accept: 'application/json' }, body: data });
-      const j = await r.json().catch(() => ({}));
-      if (r.ok && j.success) { form.reset(); say('Thanks. Your message is on its way.', 'ok'); }
-      else say('That did not go through. Please try again, or use the email address below.', 'err');
-    } catch (err) { say('That did not go through. Please try again, or use the email address below.', 'err'); }
-    finally { btn.disabled = false; }
+  form.addEventListener('submit', e => {
+    if (!form.checkValidity()) { e.preventDefault(); say('Please fill in your name, a valid email and a message.', 'err'); form.reportValidity(); return; }
+    if (form.botcheck.checked) { e.preventDefault(); return; }
+    if (!connected) { e.preventDefault(); say('The form is not connected yet. Please use the email address below.', 'err'); return; }
+    // Plain browser form submit to Web3Forms (no fetch, so nothing for CORS to block); Web3Forms redirects back with ?sent=1.
+    form.querySelector('button[type=submit]').disabled = true; say('Sending...');
   });
 })();
 </script>
