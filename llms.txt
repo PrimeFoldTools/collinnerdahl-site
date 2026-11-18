@@ -8,6 +8,7 @@
 - AI agent systems built with the same quality checks a production line runs: https://primefold.tools
 - Andon, an open-source guard that stops a coding agent from saying "done" without proof: https://github.com/PrimeFoldTools/andon
 - Proof page, three proofs in two minutes: https://collinnerdahl.com/proof.html
+- Builds page, what I shipped, what I run every day, and prototypes: https://collinnerdahl.com/builds.html
 
 ## Background
 - 2009 to 2024: Active Playground Equipment, from CNC technician to production manager. Sales grew from $650K to over $3M a year. Led the production teams and owned the final check before every job shipped.
